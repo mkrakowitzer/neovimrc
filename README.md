@@ -2,6 +2,16 @@
 
 Heavily based off the primeagens neovimrc with my own customisations.
 
+## requirements
+
+- neovim 0.9.5 or later
+- git
+- python3
+- nodejs
+- npm
+- ripgrep
+- developer tools (gcc, make, cmake, etc)
+
 ## Install
 
 ```bash
