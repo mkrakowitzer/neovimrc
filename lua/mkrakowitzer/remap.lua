@@ -54,3 +54,6 @@ vim.keymap.set("n", "<leader><leader>", function()
     vim.cmd("so")
 end)
 
+-- Split navigation (similar to tmux bindings)
+vim.keymap.set("n", "<C-w>-", "<C-w>s")
+vim.keymap.set("n", "<C-w>|", "<C-w>v")

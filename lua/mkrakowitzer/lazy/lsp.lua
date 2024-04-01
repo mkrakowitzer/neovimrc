@@ -67,8 +67,8 @@ return {
 --                ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
 --                ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
 --                [<C-y>'] = cmp.mapping.confirm({ select = true }),
-                ['<Space>'] = cmp.mapping.confirm({ select = true }),
-                ["<C-Space>"] = cmp.mapping.complete(),
+                ['<C-Space>'] = cmp.mapping.confirm({ select = true }),
+--                ["<C-Space>"] = cmp.mapping.complete(),
             }),
             sources = cmp.config.sources({
                 { name = 'nvim_lsp' },
@@ -107,30 +107,30 @@ return {
                 -- Instead I use https://github.com/incu6us/goimports-reviser
                 -- Via https://github.com/stevearc/conform.nvim
                 --
-                vim.api.nvim_create_autocmd({ "BufWritePost" }, {
-                    group = vim.api.nvim_create_augroup("FixGoImports",
-                        { clear = true }),
-                    pattern = "*.go",
-                    callback = function()
-                        -- ensure imports are sorted and grouped correctly
-                        local params = vim.lsp.util.make_range_params()
-                        params.context = { only = { "source.organizeImports" } }
-                        local result =
-                        vim.lsp.buf_request_sync(0,
-                            "textDocument/codeAction",
-                            params)
-                        for _, res in pairs(result or {}) do
-                            for _, r in pairs(res.result or {}) do
-                                if r.edit then
-                                    vim.lsp.util.apply_workspace_edit(
-                                        r.edit, "UTF-8")
-                                else
-                                    vim.lsp.buf.execute_command(r.command)
-                                end
-                            end
-                        end
-                    end
-                })
+                --vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+                --    group = vim.api.nvim_create_augroup("FixGoImports",
+                --        { clear = true }),
+                --    pattern = "*.go",
+                --    callback = function()
+                --        -- ensure imports are sorted and grouped correctly
+                --        local params = vim.lsp.util.make_range_params()
+                --        params.context = { only = { "source.organizeImports" } }
+                --        local result =
+                --        vim.lsp.buf_request_sync(0,
+                --            "textDocument/codeAction",
+                --            params)
+                --        for _, res in pairs(result or {}) do
+                --            for _, r in pairs(res.result or {}) do
+                --                if r.edit then
+                --                    vim.lsp.util.apply_workspace_edit(
+                --                        r.edit, "UTF-8")
+                --                else
+                --                    vim.lsp.buf.execute_command(r.command)
+                --                end
+                --            end
+                --        end
+                --    end
+                --})
             end,
             settings = {
                 -- https://go.googlesource.com/vscode-go/+/HEAD/docs/settings.md#settings-for

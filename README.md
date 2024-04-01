@@ -11,6 +11,16 @@ Heavily based off the primeagens neovimrc with my own customisations.
 - npm
 - ripgrep
 - developer tools (gcc, make, cmake, etc)
+- pip install codespell
+- snap install goimports-reviser (linux)
+- go install golang.org/x/tools/cmd/goimports@latest
+- sudo npm install -g markdownlint-cli
+- npm install -g npm@10.5.0
+- pip install mdformat
+- sudo apt install shellcheck
+- sudo npm install -g fixjson
+- git clone --depth=1 https://github.com/tfutils/tfenv.git ~/.tfenv (then install terraform)
+- sudo snap install yq
 
 ## Install
 
@@ -167,4 +177,3 @@ The configuration includes the following plugins for various enhancements:
 | ---- | ----------- | ----------- |
 | `n`  | `<leader>zz` | Enter Zen Mode with 90% window width, wrapping disabled, line numbers and relative numbers enabled. Executes `ColorMyPencils()`. |
 | `n`  | `<leader>zZ` | Enter Zen Mode with 80% window width, wrapping disabled, both line numbers and relative numbers disabled, `colorcolumn` set to `0`. Executes `ColorMyPencils()`. |
-
