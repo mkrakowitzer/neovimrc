@@ -4,23 +4,8 @@ Heavily based off the primeagens neovimrc with my own customisations.
 
 ## requirements
 
-- neovim 0.9.5 or later
-- git
-- python3
-- nodejs
-- npm
-- ripgrep
-- developer tools (gcc, make, cmake, etc)
-- pip install codespell
-- snap install goimports-reviser (linux)
-- go install golang.org/x/tools/cmd/goimports@latest
-- sudo npm install -g markdownlint-cli
-- npm install -g npm@10.5.0
-- pip install mdformat
-- sudo apt install shellcheck
-- sudo npm install -g fixjson
-- git clone --depth=1 https://github.com/tfutils/tfenv.git ~/.tfenv (then install terraform)
-- sudo snap install yq
+Easiest way to install all the requirements is to install my [dotfiles](https://github.com/mkrakowitzer/dotfiles)
+and run the setup script otherwise good luck.
 
 ## Install
 
