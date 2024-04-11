@@ -8,6 +8,7 @@ return {
             "marilari88/neotest-vitest",
             "nvim-neotest/neotest-plenary",
             "nvim-neotest/nvim-nio",
+            "folke/which-key.nvim",
         },
         config = function()
             local neotest = require("neotest")
@@ -15,21 +16,23 @@ return {
                 adapters = {
                     require("neotest-vitest"),
                     require("neotest-plenary").setup({
-                        -- this is my standard location for minimal vim rc
-                        -- in all my projects
                         min_init = "./scripts/tests/minimal.vim",
                     }),
                 }
             })
 
-            vim.keymap.set("n", "<leader>tc", function()
-                neotest.run.run()
-            end)
-
-            vim.keymap.set("n", "<leader>tf", function()
-                neotest.run.run(vim.fn.expand("%"))
-            end)
+            local wk = require("which-key")
+            wk.register({
+                ["<leader>t"] = {
+                    name = "+test", -- Test group
+                    c = { function() neotest.run.run() end, "Run closest test" },
+                    f = { function() neotest.run.run(vim.fn.expand("%")) end, "Run tests in current file" },
+                    a = { function() neotest.run.run({ suite = true }) end, "Run all tests" },
+                    l = { function() neotest.run.run_last() end, "Run last test" },
+                    s = { function() neotest.summary.toggle() end, "Toggle test summary" },
+                    o = { function() neotest.output.open() end, "Open test output" },
+                },
+            })
         end,
     },
 }
-

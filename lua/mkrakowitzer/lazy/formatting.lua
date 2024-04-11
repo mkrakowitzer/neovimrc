@@ -1,17 +1,3 @@
--- NOTE: Use the following to disable warnings/errors.
---
--- golangci-lint (don't try to add a <REASON> it doesn't work)
--- //nolint:<TOOL>,<TOOL>
---
--- staticcheck (on same line as issue)
--- //lint:ignore <CODE> <REASON>
---
--- gosec (on same line as issue or line above issue)
--- // #nosec <CODE> <REASON>
---
--- yamllint (on same line as issue or line above issue, or across whole file)
--- # yamllint disable-line rule:<RULE>
--- # yamllint disable rule:<RULE>
 return {
     -- FORMATTING
     "stevearc/conform.nvim",
@@ -65,8 +51,17 @@ return {
             desc = "Re-enable autoformat-on-save",
         })
 
-        vim.keymap.set("", "<leader><leader>fd", "<Cmd>FormatDisable<CR>", { desc = "Disable autoformat-on-save" })
-        vim.keymap.set("", "<leader><leader>fe", "<Cmd>FormatEnable<CR>", { desc = "Re-enable autoformat-on-save" })
+        local wk = require("which-key")
+
+        wk.register({
+            ["<leader>"] = {
+                ["<leader>f"] = {
+                    name = "+format", -- Sets the label for the formatting group
+                    d = { "<Cmd>FormatDisable<CR>", "Disable autoformat-on-save" },
+                    e = { "<Cmd>FormatEnable<CR>", "Re-enable autoformat-on-save" },
+                }
+            }
+        }, { mode = "" })
 
         -- Comment out if you prefer format_on_save.
         vim.api.nvim_create_autocmd("BufWritePre", {

@@ -1,7 +1,10 @@
 return {
-    --    "mbbill/undotree",
-    --
-    --    config = function()
-    --        vim.keymap.set("n", "<leader>u", vim.cmd.UndotreeToggle)
-    --    end
+    "mbbill/undotree",
+    config = function()
+        local wk = require("which-key")
+
+        wk.register({
+            ["<leader>u"] = { "<cmd>UndotreeToggle<CR>", "Toggle Undotree" }
+        }, { mode = "n" })
+    end
 }

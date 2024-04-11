@@ -2,22 +2,17 @@ return {
     {
         "folke/trouble.nvim",
         config = function()
-            require("trouble").setup({
-                icons = false,
+            require("trouble").setup({ icons = false })
+
+            local wk = require("which-key")
+            wk.register({
+                ["<leader>t"] = {
+                    name = "+trouble",
+                    t = { function() require("trouble").toggle() end, "Toggle Trouble" },
+                },
+                ["[t"] = { function() require("trouble").previous({ skip_groups = true, jump = true }) end, "Previous Trouble" },
+                ["]t"] = { function() require("trouble").next({ skip_groups = true, jump = true }) end, "Next Trouble" },
             })
-
-            vim.keymap.set("n", "<leader>tt", function()
-                require("trouble").toggle()
-            end)
-
-            vim.keymap.set("n", "[t", function()
-                require("trouble").next({skip_groups = true, jump = true});
-            end)
-
-            vim.keymap.set("n", "]t", function()
-                require("trouble").previous({skip_groups = true, jump = true});
-            end)
-
         end
     },
 }

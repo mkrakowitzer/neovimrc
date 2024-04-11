@@ -3,24 +3,20 @@ return {
     dependencies = {
         "nvim-treesitter/nvim-treesitter",
         "L3MON4D3/LuaSnip",
+        "folke/which-key.nvim",
     },
     config = function()
-        local neogen = require("neogen")
+        require("neogen").setup({ snippet_engine = "luasnip" })
 
-        neogen.setup({
-            snippet_engine = "luasnip"
+        local wk = require("which-key")
+        wk.register({
+            ["<leader>n"] = {
+                name = "+neogen",
+                f = { function() require("neogen").generate({ type = "func" }) end, "Generate function documentation" },
+                t = { function() require("neogen").generate({ type = "type" }) end, "Generate type documentation" },
+            },
         })
-
-        vim.keymap.set("n", "<leader>nf", function()
-            neogen.generate({ type = "func" })
-        end)
-
-        vim.keymap.set("n", "<leader>nt", function()
-            neogen.generate({ type = "type" })
-        end)
-
     end,
     -- Uncomment next line if you want to follow only stable versions
     -- version = "*"
 }
-
