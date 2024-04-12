@@ -14,7 +14,7 @@ return {
                 -- https://github.com/rhysd/fixjson
                 json = { "fixjson" },
                 -- https://github.com/executablebooks/mdformat
-                markdown = { "mdformat" },
+                -- markdown = { "mdformat" },
                 -- https://github.com/koalaman/shellcheck
                 sh = { "shellcheck" },
                 -- https://www.terraform.io/docs/cli/commands/fmt.html

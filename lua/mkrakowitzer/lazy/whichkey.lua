@@ -39,6 +39,8 @@ return {
             -- Pane navigation
             ["<C-w>-"] = { "<C-w>s", "Split window horizontally" },
             ["<C-w>|"] = { "<C-w>v", "Split window vertically" },
+            -- Works around a weird issue where A is mapped to the matchit plugin
+            ["a"] = { "a", "which_key_ignore" },
         }, { mode = "n" })
 
         wk.register({
