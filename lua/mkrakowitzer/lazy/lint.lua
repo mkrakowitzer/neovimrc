@@ -14,7 +14,7 @@ return {
             -- https://github.com/mrtazz/checkmake
             make = { "checkmake" },
             -- https://github.com/DavidAnson/markdownlint
-            markdown = { "markdownlint" },
+            markdown = { "markdownlint", "vale" },
             -- https://www.shellcheck.net/
             sh = { "shellcheck" },
             -- https://github.com/aquasecurity/trivy (originally https://github.com/aquasecurity/tfsec)
@@ -28,6 +28,12 @@ return {
             zsh = { "shellcheck", "zsh" }
         }
 
+        --        local markdownlint = require("lint").linters.markdownlint
+        --        markdownlint.args = {
+        --            "--disable",
+        --            "MD013", "MD012",
+        --            "--", -- Required
+        --        }
         --
         --        -- Automatically lint on events. You can adjust the events as needed.
         --        -- Commonly used events include BufEnter, BufWritePost, and TextChanged.
