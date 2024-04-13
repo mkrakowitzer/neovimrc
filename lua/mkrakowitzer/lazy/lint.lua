@@ -25,7 +25,9 @@ return {
             -- yaml = { "actionlint", "yamllint" },
             -- https://www.shellcheck.net/
             -- https://www.zsh.org/
-            zsh = { "shellcheck", "zsh" }
+            zsh = { "shellcheck", "zsh" },
+            -- https://github.com/ansible/ansible-lint
+            ansible = { "ansible-lint" }
         }
 
         --        local markdownlint = require("lint").linters.markdownlint

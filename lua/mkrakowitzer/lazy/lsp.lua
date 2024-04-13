@@ -30,6 +30,7 @@ return {
                 "lua_ls",
                 "rust_analyzer",
                 "gopls",
+                "ansiblels",
             },
             handlers = {
                 function(server_name)
