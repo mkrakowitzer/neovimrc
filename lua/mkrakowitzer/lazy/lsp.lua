@@ -23,6 +23,26 @@ return {
             cmp_lsp.default_capabilities()
         )
 
+        local wk = require("which-key")
+
+        wk.setup {}
+
+        wk.register({
+            ["<leader>"] = {
+                K = { "<cmd>lua vim.lsp.buf.hover()<CR>", "Show help hover" },
+                gd = { "<cmd>lua vim.lsp.buf.definition()<CR>", "Go to definition" },
+                gi = { "<cmd>lua vim.lsp.buf.implementation()<CR>", "Go to implementation" },
+                gr = { "<cmd>lua vim.lsp.buf.references()<CR>", "Find references" },
+                ["[d"] = { "<cmd>lua vim.diagnostic.goto_prev()<CR>", "Previous diagnostic" },
+                ["]d"] = { "<cmd>lua vim.diagnostic.goto_next()<CR>", "Next diagnostic" },
+                --                ["r"] = { "<cmd>lua vim.lsp.buf.rename()<CR>", "Rename symbol" },
+                --                ["f"] = { "<cmd>lua vim.lsp.buf.formatting()<CR>", "Format code" },
+            },
+            {
+                ["<C-k>"] = { "<cmd>lua vim.lsp.buf.signature_help()<CR>", "Signature help" },
+            }
+        }, { mode = "n" })
+
         require("fidget").setup({})
         require("mason").setup()
         require("mason-lspconfig").setup({
@@ -126,5 +146,44 @@ return {
                 }
             }
         })
+        require("lspconfig").ansiblels.setup({
+            filetypes = {
+                "yaml", "yml"
+            },
+            settings = {
+                ansible = {
+                    ansible = {
+                        path = "ansible",
+                        useFullyQualifiedCollectionNames = true
+                    },
+                    ansibleLint = {
+                        enabled = true,
+                        path = "ansible-lint"
+                    },
+                    executionEnvironment = {
+                        enabled = false
+                    },
+                    python = {
+                        interpreterPath = "python"
+                    },
+                    completion = {
+                        provideRedirectModules = true,
+                        provideModuleOptionAliases = true
+                    }
+                },
+            },
+            capabilities = capabilities,
+            on_attach = function(client, bufnr)
+                require("lsp-inlayhints").setup({
+                    inlay_hints = {
+                        parameter_hints = { prefix = "in: " }, -- "<- "
+                        type_hints = { prefix = "out: " }      -- "=> "
+                    }
+                })
+                require("lsp-inlayhints").on_attach(client, bufnr)
+                require("illuminate").on_attach(client)
+            end,
+        })
     end
+
 }
