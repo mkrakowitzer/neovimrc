@@ -31,6 +31,7 @@ return {
             ["<leader>"] = {
                 K = { "<cmd>lua vim.lsp.buf.hover()<CR>", "Show help hover" },
                 gd = { "<cmd>lua vim.lsp.buf.definition()<CR>", "Go to definition" },
+                gt = { "<cmd>lua vim.lsp.buf.type_definition()<CR>", "Go to type definition" },
                 gi = { "<cmd>lua vim.lsp.buf.implementation()<CR>", "Go to implementation" },
                 gr = { "<cmd>lua vim.lsp.buf.references()<CR>", "Find references" },
                 ["[d"] = { "<cmd>lua vim.diagnostic.goto_prev()<CR>", "Previous diagnostic" },
