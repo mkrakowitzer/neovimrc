@@ -1,8 +1,8 @@
 # neovimrc files
 
-Heavily based off the primeagens neovimrc with my own customisations.
-
 ## requirements
+
+- neovim 0.9.x
 
 Easiest way to install all the requirements is to install my [dotfiles](https://github.com/mkrakowitzer/dotfiles)
 and run the setup script otherwise good luck.
@@ -11,8 +11,7 @@ and run the setup script otherwise good luck.
 
 ```bash
 git clone https://github.com/mkrakowitzer/neovimrc
-cd neovimrc
-./deploy.sh
+ln -sf /uri/to/mkrakowitzers_neovimrc_dir ${HOME}/.config/nvim
 ```
 
 ## Plugins
@@ -33,3 +32,7 @@ The configuration includes the following plugins for various enhancements:
 ## Keymaps
 
 Keymaps are set using the `which-key` plugin
+
+## Credits
+
+Loosly based off primeagens nerovim config
