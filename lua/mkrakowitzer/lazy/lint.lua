@@ -14,7 +14,7 @@ return {
             -- https://github.com/mrtazz/checkmake
             make = { "checkmake" },
             -- https://github.com/DavidAnson/markdownlint
-            markdown = { "markdownlint", "vale" },
+            markdown = { "markdownlint", "vale", "codespell" },
             -- https://www.shellcheck.net/
             sh = { "shellcheck" },
             -- https://github.com/aquasecurity/trivy (originally https://github.com/aquasecurity/tfsec)

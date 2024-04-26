@@ -36,8 +36,8 @@ return {
                 gr = { "<cmd>lua vim.lsp.buf.references()<CR>", "Find references" },
                 ["[d"] = { "<cmd>lua vim.diagnostic.goto_prev()<CR>", "Previous diagnostic" },
                 ["]d"] = { "<cmd>lua vim.diagnostic.goto_next()<CR>", "Next diagnostic" },
-                --                ["r"] = { "<cmd>lua vim.lsp.buf.rename()<CR>", "Rename symbol" },
-                --                ["f"] = { "<cmd>lua vim.lsp.buf.formatting()<CR>", "Format code" },
+                ["r"] = { "<cmd>lua vim.lsp.buf.rename()<CR>", "Rename symbol" },
+                --["f"] = { "<cmd>lua vim.lsp.buf.formatting()<CR>", "Format code" },
             },
             {
                 ["<C-k>"] = { "<cmd>lua vim.lsp.buf.signature_help()<CR>", "Signature help" },
