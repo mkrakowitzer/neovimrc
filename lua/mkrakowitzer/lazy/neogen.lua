@@ -9,14 +9,10 @@ return {
         require("neogen").setup({ snippet_engine = "luasnip" })
 
         local wk = require("which-key")
-        wk.register({
-            ["<leader>n"] = {
-                name = "+neogen",
-                f = { function() require("neogen").generate({ type = "func" }) end, "Generate function documentation" },
-                t = { function() require("neogen").generate({ type = "type" }) end, "Generate type documentation" },
-            },
+        wk.add({
+            { "<leader>n",  group = "+neogen",                                            mode = "n" },
+            { "<leader>nf", function() require("neogen").generate({ type = "func" }) end, desc = "Generate function documentation", mode = "n" },
+            { "<leader>nt", function() require("neogen").generate({ type = "type" }) end, desc = "Generate type documentation",     mode = "n" },
         })
     end,
-    -- Uncomment next line if you want to follow only stable versions
-    -- version = "*"
 }

@@ -23,7 +23,7 @@ return {
                 -- http://xmlsoft.org/xmllint.html
                 yq = { "yq" },
             },
-            format_on_save = function(bufnr)
+            format_after_save = function(bufnr)
                 -- disable with a global or buffer-local variable
                 if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
                     return
@@ -53,15 +53,14 @@ return {
 
         local wk = require("which-key")
 
-        wk.register({
-            ["<leader>"] = {
-                ["<leader>f"] = {
-                    name = "+format", -- Sets the label for the formatting group
-                    d = { "<Cmd>FormatDisable<CR>", "Disable autoformat-on-save" },
-                    e = { "<Cmd>FormatEnable<CR>", "Re-enable autoformat-on-save" },
-                }
+        wk.add({
+            {
+                mode = "n",
+                { "<leader>f",  group = "+format" }, -- group label
+                { "<leader>fd", "<Cmd>FormatDisable<CR>", desc = "Disable autoformat-on-save" },
+                { "<leader>fe", "<Cmd>FormatEnable<CR>",  desc = "Re-enable autoformat-on-save" },
             }
-        }, { mode = "" })
+        })
 
         -- Comment out if you prefer format_on_save.
         vim.api.nvim_create_autocmd("BufWritePre", {

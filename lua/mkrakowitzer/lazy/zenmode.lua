@@ -3,37 +3,41 @@ return {
     config = function()
         local wk = require("which-key")
 
-        wk.register({
-            ["<leader>z"] = {
-                z = { function()
-                    require("zen-mode").setup {
-                        window = {
-                            width = 90,
-                            options = {}
-                        },
-                    }
+        wk.add({
+            { "<leader>z", group = "+zen", mode = "n" },
+
+            {
+                "<leader>zz",
+                function()
+                    require("zen-mode").setup({
+                        window = { width = 90, options = {} },
+                    })
                     require("zen-mode").toggle()
                     vim.wo.wrap = false
                     vim.wo.number = true
                     vim.wo.rnu = true
                     ColorMyPencils()
-                end, "Zen Mode: Normal" },
+                end,
+                desc = "Zen Mode: Normal",
+                mode = "n"
+            },
 
-                Z = { function()
-                    require("zen-mode").setup {
-                        window = {
-                            width = 80,
-                            options = {}
-                        },
-                    }
+            {
+                "<leader>zZ",
+                function()
+                    require("zen-mode").setup({
+                        window = { width = 80, options = {} },
+                    })
                     require("zen-mode").toggle()
                     vim.wo.wrap = false
                     vim.wo.number = false
                     vim.wo.rnu = false
                     vim.opt.colorcolumn = "0"
                     ColorMyPencils()
-                end, "Zen Mode: Distraction-free" },
-            }
-        }, { mode = "n" })
+                end,
+                desc = "Zen Mode: Distraction-free",
+                mode = "n"
+            },
+        })
     end
 }

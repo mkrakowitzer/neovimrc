@@ -25,26 +25,41 @@ return {
 
         local wk = require("which-key")
 
-        wk.setup {}
+        local wk = require("which-key")
 
-        wk.register({
-            ["<leader>"] = {
-                K = { "<cmd>lua vim.lsp.buf.hover()<CR>", "Show help hover" },
-                gd = { "<cmd>lua vim.lsp.buf.definition()<CR>", "Go to definition" },
-                gt = { "<cmd>lua vim.lsp.buf.type_definition()<CR>", "Go to type definition" },
-                gi = { "<cmd>lua vim.lsp.buf.implementation()<CR>", "Go to implementation" },
-                gr = { "<cmd>lua vim.lsp.buf.references()<CR>", "Find references" },
-                ["[d"] = { "<cmd>lua vim.diagnostic.goto_prev()<CR>", "Previous diagnostic" },
-                ["]d"] = { "<cmd>lua vim.diagnostic.goto_next()<CR>", "Next diagnostic" },
-                ["r"] = { "<cmd>lua vim.lsp.buf.rename()<CR>", "Rename symbol" },
-                --["f"] = { "<cmd>lua vim.lsp.buf.formatting()<CR>", "Format code" },
-            },
-            {
-                ["<C-k>"] = { "<cmd>lua vim.lsp.buf.signature_help()<CR>", "Signature help" },
-            }
-        }, { mode = "n" })
+        wk.setup({})
+
+        wk.add({
+            -- Normal-mode LSP + diagnostics
+            { "<C-k>",      function() vim.lsp.buf.signature_help() end, desc = "Signature help",        mode = "n" },
+            { "<leader>K",  vim.lsp.buf.hover,                           desc = "Show help hover",       mode = "n" },
+            { "<leader>[d", vim.diagnostic.goto_prev,                    desc = "Previous diagnostic",   mode = "n" },
+            { "<leader>]d", vim.diagnostic.goto_next,                    desc = "Next diagnostic",       mode = "n" },
+            { "<leader>gd", vim.lsp.buf.definition,                      desc = "Go to definition",      mode = "n" },
+            { "<leader>gi", vim.lsp.buf.implementation,                  desc = "Go to implementation",  mode = "n" },
+            { "<leader>gr", vim.lsp.buf.references,                      desc = "Find references",       mode = "n" },
+            { "<leader>gt", vim.lsp.buf.type_definition,                 desc = "Go to type definition", mode = "n" },
+            { "<leader>r",  vim.lsp.buf.rename,                          desc = "Rename symbol",         mode = "n" },
+        })
+
+        -- Optional: group them under a <leader> “LSP” menu in the which-key popup
+        wk.add({
+            { "<leader>g",  group = "LSP Goto" },
+            { "<leader>gd", desc = "Go to definition" },
+            { "<leader>gi", desc = "Go to implementation" },
+            { "<leader>gr", desc = "Find references" },
+            { "<leader>gt", desc = "Go to type definition" },
+            { "<leader>[d", group = "Diagnostics" },
+            { "<leader>]d", desc = "Next diagnostic" },
+            { "<leader>[d", desc = "Prev diagnostic" },
+            { "<leader>K",  group = "Hover/Help" },
+            { "<leader>K",  desc = "Show help hover" },
+            { "<leader>r",  group = "Refactor" },
+            { "<leader>r",  desc = "Rename symbol" },
+        })
 
         require("fidget").setup({})
+
         require("mason").setup()
         require("mason-lspconfig").setup({
             ensure_installed = {
@@ -55,26 +70,26 @@ return {
             },
             handlers = {
                 function(server_name)
-                    require("lspconfig")[server_name].setup {
-                        capabilities = capabilities
-                    }
+                    require("lspconfig")[server_name].setup({
+                        capabilities = capabilities, -- make sure 'capabilities' is defined (e.g. via cmp_nvim_lsp)
+                    })
                 end,
 
                 ["lua_ls"] = function()
                     local lspconfig = require("lspconfig")
-                    lspconfig.lua_ls.setup {
+                    lspconfig.lua_ls.setup({
                         capabilities = capabilities,
                         settings = {
                             Lua = {
-                                runtime = { version = "Lua 5.1" },
+                                runtime = { version = "Lua 5.1" }, -- or "LuaJIT" for Neovim
                                 diagnostics = {
                                     globals = { "vim", "it", "describe", "before_each", "after_each" },
                                 },
-                            }
-                        }
-                    }
+                            },
+                        },
+                    })
                 end,
-            }
+            },
         })
 
         local cmp_select = { behavior = cmp.SelectBehavior.Select }

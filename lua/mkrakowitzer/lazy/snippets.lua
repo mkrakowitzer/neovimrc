@@ -14,20 +14,24 @@ return {
             ls.filetype_extend("go", { "go" })
 
             local wk = require("which-key")
-            wk.register({
+            wk.add({
                 -- Snippet expansion and navigation
-                ["<C-s>"] = {
-                    e = { function() ls.expand() end, "Expand snippet" },
-                    [";"] = { function() ls.jump(1) end, "Next snippet node" },
-                    [","] = { function() ls.jump(-1) end, "Previous snippet node" },
-                },
+                { "<C-s>e", function() ls.expand() end, desc = "Expand snippet",        mode = { "i", "s" } },
+                { "<C-s>;", function() ls.jump(1) end,  desc = "Next snippet node",     mode = { "i", "s" } },
+                { "<C-s>,", function() ls.jump(-1) end, desc = "Previous snippet node", mode = { "i", "s" } },
+
                 -- Snippet choice
-                ["<C-E>"] = { function()
-                    if ls.choice_active() then
-                        ls.change_choice(1)
-                    end
-                end, "Change snippet choice" },
-            }, { mode = { "i", "s" } })
+                {
+                    "<C-E>",
+                    function()
+                        if ls.choice_active() then
+                            ls.change_choice(1)
+                        end
+                    end,
+                    desc = "Change snippet choice",
+                    mode = { "i", "s" }
+                },
+            })
         end,
     },
 }

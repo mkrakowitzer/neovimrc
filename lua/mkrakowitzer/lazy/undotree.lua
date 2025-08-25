@@ -3,8 +3,8 @@ return {
     config = function()
         local wk = require("which-key")
 
-        wk.register({
-            ["<leader>u"] = { "<cmd>UndotreeToggle<CR>", "Toggle Undotree" }
-        }, { mode = "n" })
+        wk.add({
+            { "<leader>u", "<cmd>UndotreeToggle<CR>", desc = "Toggle Undotree", mode = "n" },
+        })
     end
 }

@@ -11,25 +11,47 @@ return {
         local builtin = require('telescope.builtin')
         local wk = require("which-key")
 
-        wk.register({
-            ["<leader>p"] = {
-                name = "+telescope",
-                v = { "<cmd>Ex<CR>", "Open file explorer" },
-                f = { builtin.find_files, "Find Files" },
-                ws = { function()
+        wk.add({
+            -- Group label under <leader>p
+            { "<leader>p",  group = "+telescope", mode = "n" },
+
+            -- Sub-commands
+            { "<leader>pv", "<cmd>Ex<CR>",        desc = "Open file explorer", mode = "n" },
+            { "<leader>pf", builtin.find_files,   desc = "Find Files",         mode = "n" },
+
+            {
+                "<leader>pws",
+                function()
                     local word = vim.fn.expand("<cword>")
                     builtin.grep_string({ search = word })
-                end, "Grep Current Word (Small)" },
-                Ws = { function()
+                end,
+                desc = "Grep Current Word (small)",
+                mode = "n"
+            },
+
+            {
+                "<leader>pWs",
+                function()
                     local word = vim.fn.expand("<cWORD>")
                     builtin.grep_string({ search = word })
-                end, "Grep Current WORD (Big)" },
-                s = { function()
-                    builtin.grep_string({ search = vim.fn.input("Grep > ") })
-                end, "Search String" },
-                h = { builtin.help_tags, "Help Tags" },
+                end,
+                desc = "Grep Current WORD (BIG)",
+                mode = "n"
             },
-            ["<C-p>"] = { builtin.git_files, "Git Files" },
+
+            {
+                "<leader>ps",
+                function()
+                    builtin.grep_string({ search = vim.fn.input("Grep > ") })
+                end,
+                desc = "Search String",
+                mode = "n"
+            },
+
+            { "<leader>ph", builtin.help_tags, desc = "Help Tags", mode = "n" },
+
+            -- Standalone mapping
+            { "<C-p>",      builtin.git_files, desc = "Git Files", mode = "n" },
         })
     end,
 }
