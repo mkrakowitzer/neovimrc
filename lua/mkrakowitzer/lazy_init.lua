@@ -22,4 +22,5 @@ require("lazy").setup({
             "packspec",
         },
     },
+    install = { missing = false },
 })
