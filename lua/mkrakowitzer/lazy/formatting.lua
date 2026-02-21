@@ -21,7 +21,7 @@ return {
                 -- https://opentofu.org/docs/cli/commands/fmt/  NOTE: This is an alternative `tofu_fmt`
                 terraform = { "terraform_fmt" },
                 -- http://xmlsoft.org/xmllint.html
-                yq = { "yq" },
+                yaml = { "yq" },
             },
             format_after_save = function(bufnr)
                 -- disable with a global or buffer-local variable
@@ -54,21 +54,15 @@ return {
         local wk = require("which-key")
 
         wk.add({
+            { "<leader>f", group = "+format", mode = "n" },
             {
+                "<leader>ff",
+                function() conform.format({ async = true, lsp_fallback = true }) end,
+                desc = "Format buffer",
                 mode = "n",
-                { "<leader>f",  group = "+format" }, -- group label
-                { "<leader>fd", "<Cmd>FormatDisable<CR>", desc = "Disable autoformat-on-save" },
-                { "<leader>fe", "<Cmd>FormatEnable<CR>",  desc = "Re-enable autoformat-on-save" },
-            }
-        })
-
-        -- Comment out if you prefer format_on_save.
-        vim.api.nvim_create_autocmd("BufWritePre", {
-            group = vim.api.nvim_create_augroup("Formatting", { clear = true }),
-            pattern = "*",
-            callback = function(args)
-                require("conform").format({ bufnr = args.buf })
-            end
+            },
+            { "<leader>fd", "<Cmd>FormatDisable<CR>", desc = "Disable autoformat-on-save", mode = "n" },
+            { "<leader>fe", "<Cmd>FormatEnable<CR>",  desc = "Re-enable autoformat-on-save", mode = "n" },
         })
     end
 }

@@ -2,7 +2,8 @@ return {
     {
         "folke/trouble.nvim",
         config = function()
-            require("trouble").setup({ icons = false })
+            local trouble = require("trouble")
+            trouble.setup({ icons = false })
 
             local wk = require("which-key")
 
