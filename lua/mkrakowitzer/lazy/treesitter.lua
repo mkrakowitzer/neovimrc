@@ -44,21 +44,31 @@ return {
         end
 
         treesitter.setup({})
-        local installed = {}
-        for _, lang in ipairs(treesitter.get_installed()) do
-            installed[lang] = true
+
+        if vim.fn.exists(":TSInstallManaged") == 2 then
+            vim.api.nvim_del_user_command("TSInstallManaged")
         end
-        local missing = {}
-        for _, lang in ipairs(ensure_installed) do
-            if not installed[lang] then
-                table.insert(missing, lang)
+        vim.api.nvim_create_user_command("TSInstallManaged", function()
+            if vim.fn.executable("tree-sitter") == 0 then
+                vim.notify("tree-sitter CLI is required. Install with: cargo install tree-sitter-cli", vim.log.levels.ERROR)
+                return
             end
-        end
-        if #missing > 0 and #vim.api.nvim_list_uis() > 0 then
-            vim.schedule(function()
-                treesitter.install(missing)
-            end)
-        end
+            local installed = {}
+            for _, lang in ipairs(treesitter.get_installed()) do
+                installed[lang] = true
+            end
+            local missing = {}
+            for _, lang in ipairs(ensure_installed) do
+                if not installed[lang] then
+                    table.insert(missing, lang)
+                end
+            end
+            if #missing == 0 then
+                vim.notify("All managed treesitter parsers are already installed")
+                return
+            end
+            treesitter.install(missing, { summary = true, max_jobs = 2 })
+        end, {})
 
         local group = vim.api.nvim_create_augroup("mkrakowitzer_treesitter", { clear = true })
         vim.api.nvim_create_autocmd("FileType", {
@@ -68,7 +78,9 @@ return {
                     return
                 end
                 vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+                vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+                vim.wo.foldmethod = "expr"
             end,
         })
-    end
+    end,
 }
