@@ -105,7 +105,7 @@ return {
                 },
             },
             ansiblels = {
-                filetypes = { "yaml" },
+                filetypes = { "yaml", "yml" },
                 settings = {
                     ansible = {
                         ansible = {
