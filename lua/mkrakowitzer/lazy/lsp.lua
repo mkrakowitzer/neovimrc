@@ -27,7 +27,6 @@ return {
 
         -- ===== which-key =====
         local wk = require("which-key")
-        wk.setup({})
         wk.add({
             { "<C-k>",      function() vim.lsp.buf.signature_help() end, desc = "Signature help",        mode = "n" },
             { "<leader>K",  vim.lsp.buf.hover,                           desc = "Show help hover",       mode = "n" },
@@ -38,12 +37,6 @@ return {
             { "<leader>gr", vim.lsp.buf.references,                      desc = "Find references",       mode = "n" },
             { "<leader>gt", vim.lsp.buf.type_definition,                 desc = "Go to type definition", mode = "n" },
             { "<leader>r",  vim.lsp.buf.rename,                          desc = "Rename symbol",         mode = "n" },
-
-            -- optional labels in the popup
-            { "<leader>g",  group = "LSP Goto",                          mode = "n" },
-            { "<leader>]",  group = "Diagnostics",                       mode = "n" },
-            { "<leader>[",  group = "Diagnostics",                       mode = "n" },
-            { "<leader>r",  group = "Refactor",                          mode = "n" },
         })
 
         -- ===== UI helpers =====
@@ -62,105 +55,121 @@ return {
         end
 
         local function base_on_attach(client, bufnr)
-            -- enable native inlay hints if the server supports them
-            enable_inlay_hints(bufnr)
-            -- Illuminate (guarded so it won’t error if plugin is missing)
+            if client and client.server_capabilities and client.server_capabilities.inlayHintProvider then
+                enable_inlay_hints(bufnr)
+            end
+            -- Illuminate (guarded so it will not error if plugin is missing)
             pcall(function() require("illuminate").on_attach(client) end)
         end
 
         -- ===== Mason + LSP =====
-        require("mason").setup()
-        require("mason-lspconfig").setup({
-            ensure_installed = {
-                "lua_ls",
-                "rust_analyzer",
-                "gopls",
-                "ansiblels",
+        local servers = {
+            "lua_ls",
+            "rust_analyzer",
+            "gopls",
+            "ansiblels",
+        }
+        local server_overrides = {
+            lua_ls = {
+                settings = {
+                    Lua = {
+                        runtime = { version = "Lua 5.1" },
+                        diagnostics = {
+                            globals = { "vim", "it", "describe", "before_each", "after_each" },
+                        },
+                    },
+                },
             },
-            handlers = {
-                -- default handler for servers without special settings
-                function(server)
-                    require("lspconfig")[server].setup({
+            gopls = {
+                settings = {
+                    gopls = {
+                        analyses = {
+                            nilness = true,
+                            unusedparams = true,
+                            unusedwrite = true,
+                            useany = true,
+                        },
+                        experimentalPostfixCompletions = true,
+                        gofumpt = true,
+                        usePlaceholders = true,
+                        hints = {
+                            assignVariableTypes = true,
+                            compositeLiteralFields = true,
+                            compositeLiteralTypes = true,
+                            constantValues = true,
+                            functionTypeParameters = true,
+                            parameterNames = true,
+                            rangeVariableTypes = true,
+                        },
+                    },
+                },
+            },
+            ansiblels = {
+                filetypes = { "yaml", "yml" },
+                settings = {
+                    ansible = {
+                        ansible = {
+                            path = "ansible",
+                            useFullyQualifiedCollectionNames = true,
+                        },
+                        ansibleLint = {
+                            enabled = true,
+                            path = "ansible-lint",
+                        },
+                        executionEnvironment = { enabled = false },
+                        python = { interpreterPath = "python" },
+                        completion = {
+                            provideRedirectModules = true,
+                            provideModuleOptionAliases = true,
+                        },
+                    },
+                },
+            },
+        }
+
+        -- In headless runs (e.g. checks/tests), skip mason registry operations.
+        local has_ui = #vim.api.nvim_list_uis() > 0
+        if has_ui then
+            require("mason").setup()
+            require("mason-lspconfig").setup({
+                ensure_installed = servers,
+                automatic_enable = false,
+            })
+        end
+
+        for _, server in ipairs(servers) do
+            local opts = vim.tbl_deep_extend("force", {
+                capabilities = capabilities,
+                on_attach = base_on_attach,
+            }, server_overrides[server] or {})
+            vim.lsp.config(server, opts)
+            vim.lsp.enable(server)
+        end
+
+        -- Enable any extra server configs that are present and not explicitly configured above.
+        if has_ui then
+            for _, server in ipairs(require("mason-lspconfig").get_installed_servers()) do
+                if not vim.tbl_contains(servers, server) then
+                    vim.lsp.config(server, {
                         capabilities = capabilities,
                         on_attach = base_on_attach,
                     })
-                end,
+                    vim.lsp.enable(server)
+                end
+            end
+        end
 
-                -- Lua
-                ["lua_ls"] = function()
-                    require("lspconfig").lua_ls.setup({
-                        capabilities = capabilities,
-                        on_attach = base_on_attach,
-                        settings = {
-                            Lua = {
-                                runtime = { version = "Lua 5.1" },
-                                diagnostics = {
-                                    globals = { "vim", "it", "describe", "before_each", "after_each" },
-                                },
-                            },
-                        },
-                    })
-                end,
-
-                -- Go
-                ["gopls"] = function()
-                    require("lspconfig").gopls.setup({
-                        capabilities = capabilities,
-                        on_attach = base_on_attach,
-                        settings = {
-                            gopls = {
-                                analyses = {
-                                    nilness = true,
-                                    unusedparams = true,
-                                    unusedwrite = true,
-                                    useany = true,
-                                },
-                                experimentalPostfixCompletions = true,
-                                gofumpt = true,
-                                usePlaceholders = true,
-                                hints = {
-                                    assignVariableTypes = true,
-                                    compositeLiteralFields = true,
-                                    compositeLiteralTypes = true,
-                                    constantValues = true,
-                                    functionTypeParameters = true,
-                                    parameterNames = true,
-                                    rangeVariableTypes = true,
-                                },
-                            },
-                        },
-                    })
-                end,
-
-                -- Ansible
-                ["ansiblels"] = function()
-                    require("lspconfig").ansiblels.setup({
-                        capabilities = capabilities,
-                        on_attach = base_on_attach, -- <-- no lsp-inlayhints here
-                        filetypes = { "yaml", "yml" },
-                        settings = {
-                            ansible = {
-                                ansible = {
-                                    path = "ansible",
-                                    useFullyQualifiedCollectionNames = true,
-                                },
-                                ansibleLint = {
-                                    enabled = true,
-                                    path = "ansible-lint",
-                                },
-                                executionEnvironment = { enabled = false },
-                                python = { interpreterPath = "python" },
-                                completion = {
-                                    provideRedirectModules = true,
-                                    provideModuleOptionAliases = true,
-                                },
-                            },
-                        },
-                    })
-                end,
+        -- ===== Diagnostics UI =====
+        vim.diagnostic.config({
+            float = {
+                focusable = false,
+                style = "minimal",
+                border = "rounded",
+                source = "always",
+                header = "",
+                prefix = "",
             },
         })
-
         -- ===== nvim-cmp =====
         local cmp_select = { behavior = cmp.SelectBehavior.Select }
         cmp.setup({
@@ -180,18 +189,6 @@ return {
             }, {
                 { name = "buffer" },
             }),
-        })
-
-        -- ===== Diagnostics UI =====
-        vim.diagnostic.config({
-            float = {
-                focusable = false,
-                style = "minimal",
-                border = "rounded",
-                source = "always",
-                header = "",
-                prefix = "",
-            },
         })
     end,
 }
