@@ -10,7 +10,7 @@ return {
                 "<leader>zz",
                 function()
                     require("zen-mode").setup({
-                        window = { width = 90, options = {} },
+                        window = { width = 126, options = {} },
                     })
                     require("zen-mode").toggle()
                     vim.wo.wrap = false
@@ -26,7 +26,7 @@ return {
                 "<leader>zZ",
                 function()
                     require("zen-mode").setup({
-                        window = { width = 80, options = {} },
+                        window = { width = 120, options = {} },
                     })
                     require("zen-mode").toggle()
                     vim.wo.wrap = false
