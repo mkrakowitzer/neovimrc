@@ -28,6 +28,10 @@ vim.opt.isfname:append("@-@")
 
 vim.opt.updatetime = 50
 
-vim.opt.colorcolumn = "80"
+vim.opt.colorcolumn = "120"
 vim.opt.timeoutlen = 1000
 vim.opt.ttimeoutlen = 0
+
+-- Keep treesitter folds available (zc, zM) but open every fold on load.
+vim.opt.foldlevel = 99
+vim.opt.foldlevelstart = 99
