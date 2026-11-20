@@ -18,16 +18,16 @@ return {
         local wk = require("which-key")
 
         wk.add({
-            { "<leader>c",  group = "+cloak",        mode = "n" },
+            { "<leader>i",  group = "+cloak",        mode = "n" },
 
             -- Mask / show / toggle
-            { "<leader>cm", "<cmd>CloakEnable<CR>",  desc = "Mask secrets (enable)",  mode = "n" },
-            { "<leader>cs", "<cmd>CloakDisable<CR>", desc = "Show secrets (disable)", mode = "n" },
-            { "<leader>ct", "<cmd>CloakToggle<CR>",  desc = "Toggle cloak",           mode = "n" },
+            { "<leader>im", "<cmd>CloakEnable<CR>",  desc = "Mask secrets (enable)",  mode = "n" },
+            { "<leader>is", "<cmd>CloakDisable<CR>", desc = "Show secrets (disable)", mode = "n" },
+            { "<leader>it", "<cmd>CloakToggle<CR>",  desc = "Toggle cloak",           mode = "n" },
 
             -- Quick peek: briefly reveal, then re-mask after 1.5s
             {
-                "<leader>cp",
+                "<leader>ip",
                 function()
                     vim.cmd("CloakDisable")
                     vim.defer_fn(function() vim.cmd("CloakEnable") end, 1500)
